@@ -1,0 +1,94 @@
+
+expense_db = {
+    "Food": 2500,
+    "Rent": 8000,
+    "Travel": 1200,
+    "Internet": 500
+}
+
+
+active_users = ["Ravi", "Aman", "Mukesh"]
+
+def check_user_access(username):
+    """Demonstrates: String Methods and If-In-Else Conditions."""
+ 
+    clean_name = username.strip().capitalize()
+    
+    if clean_name in active_users:
+        print(f"\n[✔] Welcome back, {clean_name}! System Initialized.")
+        return True
+    else:
+        print(f"\n[❌] Access Denied: '{clean_name}' is not registered.")
+        return False
+
+def view_expenses():
+    """Demonstrates: Dictionary Key-Value Loops and String Formatting."""
+    print("\n" + "-"*35)
+    print(f"{'EXPENSE CATEGORY':<20} | {'AMOUNT (INR)'}")
+    print("-"*35)
+    
+    for category, amount in expense_db.items():
+        print(f"{category:<20} | Rs. {amount}")
+    print("-"*35)
+def add_new_expense():
+    """Demonstrates: Exception Handling (Try-Except) & Dict Insertion."""
+    category = input("Enter new expense category name: ").strip().capitalize()
+    
+    try:
+        amount = float(input(f"Enter amount spent on {category}: "))
+        
+        if amount <= 0:
+            print("[Error] Amount must be a positive number.")
+            return
+            
+        expense_db[category] = amount
+        print(f"[Success] Added {category} with Rs. {amount} to dashboard.")
+        
+    except ValueError:
+        print("[Error] Invalid input formatting! Please type a numeric number.")
+def advanced_analytics():
+    """Demonstrates: List Comprehension, Lambda, Built-in Functions (SUM/MAX)."""
+    if not expense_db:
+        return
+    total_spent = sum(expense_db.values())
+    
+    highest_category = max(expense_db, key=lambda k: expense_db[k])
+    
+    luxury_items = [cat for cat, val in expense_db.items() if val > 1000]
+    
+    print("\n📊 --- REAL-TIME ANALYTICS RADAR ---")
+    print(f"  • Total Monthly Cash Burn : Rs. {total_spent}")
+    print(f"  • Major Expense Driver    : {highest_category} (Rs. {expense_db[highest_category]})")
+    print(f"  • High-Value Categories   : {luxury_items}")
+    print("------------------------------------\n")
+
+def main():
+    """Demonstrates: Infinite While Loop and Switch-Case User Input Menu."""
+    print("=== SMART FINANCIAL EXPENSE PLATFORM ===")
+    user = input("Enter your username to unlock profile: ")
+    
+    if not check_user_access(user):
+        return 
+    while True:
+        print("\n1. View All Category Expenses")
+        print("2. Insert/Log a New Expense Row")
+        print("3. Run Financial Metrics Dashboard")
+        print("4. Safe Shutdown Application")
+        
+        choice = input("\nSelect processing engine menu option (1-4): ").strip()
+        
+        if choice == "1":
+            view_expenses()
+        elif choice == "2":
+            add_new_expense()
+        elif choice == "3":
+            advanced_analytics()
+        elif choice == "4":
+            print("\nDatabase states compiled safely. Goodbye!")
+            break
+        else:
+            print("[Warning] Option mismatch. Please select a valid number between 1 and 4.")
+
+if __name__ == "__main__":
+    main()
+
