@@ -1,0 +1,105 @@
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
+class Book {
+    private String title;
+    private String author;
+    private boolean isAvailable;
+
+    public Book(String title, String author) {
+        this.title = title;
+        this.author = author;
+        this.isAvailable = true; 
+    }
+
+    public String getTitle() { return title; }
+    public String getAuthor() { return author; }
+    public boolean checkAvailability() { return isAvailable; }
+
+    public void setAvailability(boolean status) {
+        this.isAvailable = status;
+    }
+}
+
+public class Main {
+ 
+    private static ArrayList<Book> libraryCatalog = new ArrayList<>();
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        libraryCatalog.add(new Book("Java Basics", "Ravi Yadav"));
+        libraryCatalog.add(new Book("SQL Guide", "Aman Sharma"));
+        libraryCatalog.add(new Book("Python Core", "Mukesh Verma"));
+
+        System.out.println("=== WELCOME TO THE SMART JAVA LIBRARY SYSTEM ===");
+
+      
+        while (true) {
+            System.out.println("\n1. Display All Available Books");
+            System.out.println("2. Issue/Check-out a Book");
+            System.out.println("3. Register/Add a New Book");
+            System.out.println("4. Safe Shutdown System");
+            System.out.print("\nSelect menu option choice (1-4): ");
+
+            String choice = scanner.nextLine().strip();
+
+            if (choice.equals("1")) {
+                viewCatalog();
+            } else if (choice.equals("2")) {
+                System.out.print("Enter exact book title to issue: ");
+                String bookTitle = scanner.nextLine().strip();
+                issueBook(bookTitle);
+            } else if (choice.equals("3")) {
+                System.out.print("Enter book title: ");
+                String newTitle = scanner.nextLine().strip();
+                System.out.print("Enter book author name: ");
+                String newAuthor = scanner.nextLine().strip();
+                
+                if (newTitle.isEmpty() || newAuthor.isEmpty()) {
+                    System.out.println("[Error] Fields cannot be left blank.");
+                } else {
+                    libraryCatalog.add(new Book(newTitle, newAuthor));
+                    System.out.println("[Success] Book logged into catalog successfully.");
+                }
+            } else if (choice.equals("4")) {
+                System.out.println("\nDatabase states compiled safely. Goodbye!");
+                break;
+            } else {
+                System.out.println("[Warning] Option mismatch. Select between 1 and 4.");
+            }
+        }
+        scanner.close();
+    }
+
+    
+    private static void viewCatalog() {
+        System.out.println("\n=============================================");
+        System.out.printf("%-18s | %-15s | %-10s\n", "BOOK TITLE", "AUTHOR", "STATUS");
+        System.out.println("=============================================");
+
+        for (Book book : libraryCatalog) {
+            String status = book.checkAvailability() ? "Available" : "Issued";
+            System.out.printf("%-18s | %-15s | %-10s\n", book.getTitle(), book.getAuthor(), status);
+        }
+        System.out.println("=============================================\n");
+    }
+
+ 
+    private static void issueBook(String title) {
+        for (Book book : libraryCatalog) {
+            if (book.getTitle().equalsIgnoreCase(title)) {
+                if (book.checkAvailability()) {
+                    book.setAvailability(false);
+                    System.out.println("[Success] '" + title + "' has been successfully issued.");
+                    return;
+                } else {
+                    System.out.println("[Notice] Sorry, this book is already issued out.");
+                    return;
+                }
+            }
+        }
+        System.out.println("[Error] Book title not found in catalog systems.");
+    }
+}
